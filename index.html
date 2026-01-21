@@ -10,13 +10,27 @@
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
-            background-color: #fdf6ff;
+            background-color: #fffaf5;
         }
         h1, h2, h3, .font-title {
             font-family: 'Fredoka', sans-serif;
         }
         .bg-magic {
-            background: linear-gradient(135deg, #fce7f3 0%, #f3e8ff 100%);
+            background: linear-gradient(135deg, #ffedd5 0%, #ffdfba 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #fff7ed;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #ffedd5;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #fed7aa;
         }
     </style>
 <script type="importmap">
@@ -33,5 +47,6 @@
 </head>
 <body>
     <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>

@@ -123,11 +123,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fdf6ff]">
-      <header className="bg-white/80 backdrop-blur-md border-b py-4 px-4 md:px-8 sticky top-0 z-30 shadow-sm">
+    <div className="min-h-screen bg-[#fffaf5]">
+      <header className="bg-white/80 backdrop-blur-md border-b py-4 px-4 md:px-8 sticky top-0 z-30 shadow-sm border-orange-100">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-pink-500 to-purple-600 p-2.5 rounded-2xl text-white shadow-md">
+            <div className="bg-gradient-to-br from-orange-500 to-red-600 p-2.5 rounded-2xl text-white shadow-md">
               <Icons.MagicWand />
             </div>
             <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Meu Mascote Party</h1>
@@ -146,10 +146,10 @@ const App: React.FC = () => {
               <button 
                 onClick={downloadFullKitAsZip}
                 disabled={isZipping}
-                className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all border-2 border-pink-500 text-pink-600 hover:bg-pink-50 disabled:opacity-50"
+                className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all border-2 border-orange-500 text-orange-600 hover:bg-orange-50 disabled:opacity-50"
               >
                 {isZipping ? (
-                  <div className="w-5 h-5 border-2 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/></svg>
                 )}
@@ -160,7 +160,7 @@ const App: React.FC = () => {
               onClick={generateFullKit}
               disabled={!childPhoto || generation.isGenerating}
               className={`flex items-center gap-2 px-8 py-3 rounded-full font-bold transition-all shadow-lg ${
-                !childPhoto || generation.isGenerating ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-pink-500 text-white hover:bg-pink-600 hover:scale-105 active:scale-95'
+                !childPhoto || generation.isGenerating ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-orange-500 text-white hover:bg-orange-600 hover:scale-105 active:scale-95'
               }`}
             >
               {generation.isGenerating ? 'Criando...' : 'Gerar Kit'}
@@ -172,9 +172,9 @@ const App: React.FC = () => {
       <main className="max-w-7xl mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Form */}
         <div className="lg:col-span-4 space-y-6">
-          <section className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-pink-100">
+          <section className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-orange-100">
             <h2 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-              <span className="w-2 h-6 bg-pink-500 rounded-full"></span>
+              <span className="w-2 h-6 bg-orange-500 rounded-full"></span>
               A Criança
             </h2>
             
@@ -182,7 +182,7 @@ const App: React.FC = () => {
               <div 
                 onClick={() => childInputRef.current?.click()}
                 className={`relative aspect-square rounded-3xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden group ${
-                  childPhoto ? 'border-pink-300' : 'border-gray-200 bg-gray-50 hover:bg-pink-50 hover:border-pink-200'
+                  childPhoto ? 'border-orange-300' : 'border-gray-200 bg-gray-50 hover:bg-orange-50 hover:border-orange-200'
                 }`}
               >
                 {childPhoto ? (
@@ -194,7 +194,7 @@ const App: React.FC = () => {
                   </>
                 ) : (
                   <div className="text-center p-4">
-                    <div className="bg-pink-100 text-pink-500 p-4 rounded-full inline-block mb-3">
+                    <div className="bg-orange-100 text-orange-500 p-4 rounded-full inline-block mb-3">
                       <Icons.Upload />
                     </div>
                     <p className="text-sm font-bold text-gray-500">Clique para enviar a foto da criança</p>
@@ -212,7 +212,7 @@ const App: React.FC = () => {
                     placeholder="Ex: 3" 
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
-                    className="w-full px-4 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-2 focus:ring-pink-200 transition-all outline-none font-bold text-gray-700"
+                    className="w-full px-4 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-2 focus:ring-orange-200 transition-all outline-none font-bold text-gray-700"
                   />
                 </div>
                 <div className="relative">
@@ -222,16 +222,16 @@ const App: React.FC = () => {
                     value={features}
                     onChange={(e) => setFeatures(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-2 focus:ring-pink-200 transition-all outline-none resize-none text-sm text-gray-600"
+                    className="w-full px-4 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-2 focus:ring-orange-200 transition-all outline-none resize-none text-sm text-gray-600"
                   />
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-blue-100">
+          <section className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-amber-100">
             <h2 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-              <span className="w-2 h-6 bg-blue-500 rounded-full"></span>
+              <span className="w-2 h-6 bg-amber-500 rounded-full"></span>
               O Tema
             </h2>
 
@@ -245,7 +245,7 @@ const App: React.FC = () => {
                       onClick={() => setSelectedThemeKey(selectedThemeKey === key ? null : key)}
                       className={`p-3 rounded-2xl text-left transition-all border-2 ${
                         selectedThemeKey === key 
-                          ? 'border-blue-500 bg-blue-50' 
+                          ? 'border-orange-500 bg-orange-50' 
                           : 'border-gray-50 bg-gray-50 hover:bg-gray-100 text-gray-500'
                       }`}
                     >
@@ -261,7 +261,7 @@ const App: React.FC = () => {
                 <div 
                   onClick={() => themeInputRef.current?.click()}
                   className={`aspect-video rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${
-                    themePhoto ? 'border-blue-300' : 'border-gray-100 bg-gray-50 hover:bg-blue-50'
+                    themePhoto ? 'border-orange-300' : 'border-gray-100 bg-gray-50 hover:bg-orange-50'
                   }`}
                 >
                   {themePhoto ? (
@@ -272,7 +272,7 @@ const App: React.FC = () => {
                   <input type="file" ref={themeInputRef} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, setThemePhoto)} />
                 </div>
                 {themePhoto && (
-                  <button onClick={(e) => { e.stopPropagation(); setThemePhoto(null); }} className="absolute -top-2 -right-2 bg-red-500 text-white p-1.6 rounded-full shadow-md">
+                  <button onClick={(e) => { e.stopPropagation(); setThemePhoto(null); }} className="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full shadow-md">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"/></svg>
                   </button>
                 )}
@@ -284,13 +284,13 @@ const App: React.FC = () => {
                   <div className="flex bg-gray-50 p-1 rounded-2xl border border-gray-100">
                     <button 
                       onClick={() => setStyle('cartoon')} 
-                      className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${style === 'cartoon' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400'}`}
+                      className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${style === 'cartoon' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400'}`}
                     >
                       Cartoon 2D
                     </button>
                     <button 
                       onClick={() => setStyle('pixar')} 
-                      className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${style === 'pixar' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400'}`}
+                      className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${style === 'pixar' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400'}`}
                     >
                       Pixar 3D
                     </button>
@@ -308,15 +308,15 @@ const App: React.FC = () => {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <h2 className="text-3xl font-bold text-gray-800">Seu Kit Produzido</h2>
                 {generation.isGenerating && (
-                  <div className="flex items-center gap-4 bg-white px-6 py-3 rounded-[2rem] border shadow-sm border-pink-100">
+                  <div className="flex items-center gap-4 bg-white px-6 py-3 rounded-[2rem] border shadow-sm border-orange-100">
                     <div className="relative">
-                      <div className="w-8 h-8 border-4 border-pink-100 border-t-pink-500 rounded-full animate-spin"></div>
-                      <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-pink-600">
+                      <div className="w-8 h-8 border-4 border-orange-100 border-t-orange-500 rounded-full animate-spin"></div>
+                      <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-orange-600">
                         {generation.progress}%
                       </div>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-pink-600 leading-none mb-1">Mágica em andamento...</span>
+                      <span className="text-sm font-bold text-orange-600 leading-none mb-1">Mágica em andamento...</span>
                       <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{generation.step}</span>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ const App: React.FC = () => {
                           link.download = `${img.label}.png`;
                           link.click();
                         }}
-                        className="absolute bottom-6 right-6 bg-white p-4 rounded-full shadow-2xl scale-0 group-hover:scale-100 transition-all duration-300 text-pink-500 hover:bg-pink-500 hover:text-white"
+                        className="absolute bottom-6 right-6 bg-white p-4 rounded-full shadow-2xl scale-0 group-hover:scale-100 transition-all duration-300 text-orange-500 hover:bg-orange-500 hover:text-white"
                       >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"/></svg>
                       </button>
@@ -354,11 +354,11 @@ const App: React.FC = () => {
                 ))}
                 
                 {generation.isGenerating && kit.length < 8 && (
-                  <div className="aspect-square bg-white/40 border-2 border-dashed border-pink-200 rounded-[2.5rem] flex flex-col items-center justify-center p-8 text-center animate-pulse">
-                    <div className="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-4">
+                  <div className="aspect-square bg-white/40 border-2 border-dashed border-orange-200 rounded-[2.5rem] flex flex-col items-center justify-center p-8 text-center animate-pulse">
+                    <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mb-4">
                       <Icons.MagicWand />
                     </div>
-                    <p className="text-sm text-pink-400 font-bold">Criando próxima ilustração...</p>
+                    <p className="text-sm text-orange-400 font-bold">Criando próxima ilustração...</p>
                   </div>
                 )}
               </div>
@@ -368,7 +368,7 @@ const App: React.FC = () => {
                    <button 
                     onClick={downloadFullKitAsZip}
                     disabled={isZipping}
-                    className="w-full flex items-center justify-center gap-3 px-8 py-5 rounded-3xl font-bold transition-all bg-white border-2 border-pink-500 text-pink-600 active:bg-pink-50"
+                    className="w-full flex items-center justify-center gap-3 px-8 py-5 rounded-3xl font-bold transition-all bg-white border-2 border-orange-500 text-orange-600 active:bg-orange-50"
                   >
                     {isZipping ? 'Gerando ZIP...' : 'Baixar Kit Completo (ZIP)'}
                   </button>
@@ -382,7 +382,7 @@ const App: React.FC = () => {
                  <div className="absolute bottom-20 right-20 animate-bounce" style={{ animationDuration: '4s' }}><Icons.MagicWand /></div>
               </div>
               
-              <div className="w-32 h-32 bg-gradient-to-br from-pink-50 to-blue-50 rounded-[2.5rem] flex items-center justify-center text-pink-500 mb-8 shadow-inner">
+              <div className="w-32 h-32 bg-gradient-to-br from-orange-50 to-amber-50 rounded-[2.5rem] flex items-center justify-center text-orange-500 mb-8 shadow-inner">
                 <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"/></svg>
               </div>
               <h2 className="text-4xl font-bold text-gray-800 mb-4 font-title">Mascote da Sua Festa!</h2>
@@ -398,7 +398,7 @@ const App: React.FC = () => {
                   { label: 'Painel', desc: 'Fundo gigante' }
                 ].map(item => (
                   <div key={item.label} className="p-6 bg-gray-50 rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-lg transition-all cursor-default">
-                    <span className="text-[10px] font-bold text-pink-400 uppercase tracking-widest block mb-1">{item.label}</span>
+                    <span className="text-[10px] font-bold text-orange-400 uppercase tracking-widest block mb-1">{item.label}</span>
                     <span className="text-xs font-bold text-gray-400">{item.desc}</span>
                   </div>
                 ))}
@@ -410,29 +410,12 @@ const App: React.FC = () => {
 
       <footer className="py-12 text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
-           <div className="w-2 h-2 rounded-full bg-pink-300"></div>
-           <div className="w-2 h-2 rounded-full bg-blue-300"></div>
-           <div className="w-2 h-2 rounded-full bg-purple-300"></div>
+           <div className="w-2 h-2 rounded-full bg-orange-300"></div>
+           <div className="w-2 h-2 rounded-full bg-amber-300"></div>
+           <div className="w-2 h-2 rounded-full bg-yellow-300"></div>
         </div>
         <p className="text-gray-400 text-sm font-bold uppercase tracking-widest">Meu Mascote Party • 2024</p>
       </footer>
-
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f8f8f8;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #eee;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #ddd;
-        }
-      `}</style>
     </div>
   );
 };
