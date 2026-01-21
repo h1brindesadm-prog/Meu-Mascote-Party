@@ -14,13 +14,14 @@ export class GeminiService {
       style: IllustrationStyle;
       tone: VisualTone;
       themeImage?: string | null;
+      themePrompt?: string;
     }
   ): Promise<string | null> {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const styleDesc = config.style === 'pixar' 
-      ? "Professional 3D Disney/Pixar movie style, high quality render, octane render, soft subsurface scattering, cinematic lighting" 
-      : "Professional 2D flat cartoon illustration, clean thick lines, vibrant modern vector art, children's book style";
+      ? "Professional 3D Disney/Pixar movie style, high quality render, octane render, soft subsurface scattering, cinematic lighting, 4k resolution" 
+      : "Professional 2D flat cartoon illustration, clean thick lines, vibrant modern vector art, children's book style, sharp details";
 
     const toneDesc = {
       cute: "Soft pastel colors, very sweet and gentle, heart/sparkle elements",
@@ -32,43 +33,42 @@ export class GeminiService {
     let itemPrompt = "";
     switch (itemType) {
       case 'character':
-        itemPrompt = "Full body standing pose, iconic character design, character concept sheet style. The child should be wearing an outfit directly inspired by the 'theme reference image'.";
+        itemPrompt = "Full body standing pose, iconic character design. The child should be wearing an outfit directly inspired by the theme.";
         break;
       case 'expressions':
-        itemPrompt = "Sheet of 4 different facial expressions of the same child (laughing, surprised, winking, smiling), organized grid. The child must be wearing the themed clothing from the reference.";
+        itemPrompt = "Sheet of 4 different facial expressions of the same child (laughing, surprised, winking, smiling), organized grid. The child must be wearing the themed clothing.";
         break;
       case 'topper':
-        itemPrompt = "Action pose jumping or holding a themed prop from the reference image, perfect for a cake topper, die-cut style, white border.";
+        itemPrompt = "Action pose jumping or holding a themed prop, perfect for a cake topper, die-cut style, white border.";
         break;
       case 'tags':
-        itemPrompt = "Close-up portrait inside a decorative themed frame that matches the ornaments in the 'theme reference image'.";
+        itemPrompt = "Close-up portrait inside a decorative themed frame.";
         break;
       case 'stickers':
-        itemPrompt = "Collection of 3 small themed icons/poses of the child, sticker style with white borders, using elements like animals or objects found in the 'theme reference image'.";
+        itemPrompt = "Collection of 3 small themed icons/poses of the child, sticker style with white borders.";
         break;
       case 'invitation':
-        itemPrompt = "Scenic illustration. Place the child inside a background that perfectly recreates the environment shown in the 'theme reference image'. No text.";
+        itemPrompt = "Scenic illustration. Place the child inside a background that perfectly recreates the themed environment. No text.";
         break;
       case 'age_number':
-        itemPrompt = `The child happily hugging or leaning against a large decorative 3D number "${config.age || '?'}", where the number itself is decorated with textures and patterns from the 'theme reference image'.`;
+        itemPrompt = `The child happily hugging or leaning against a large decorative 3D number "${config.age || '?'}", where the number itself is decorated with textures and patterns from the theme.`;
         break;
       case 'panel':
-        itemPrompt = "Wide horizontal landscape illustration, cinematic background. An epic expansion of the world shown in the 'theme reference image', with the child as the protagonist.";
+        itemPrompt = "Wide horizontal landscape illustration, cinematic background. An epic expansion of the themed world, with the child as the protagonist.";
         break;
     }
 
-    const themeContext = config.themeImage 
-      ? `THEME INTEGRATION: You MUST look at the 'theme reference image' provided. 
-         1. CLOTHING: Dress the child in the same style of clothes (e.g., if it's a safari photo, use safari vests and hats).
-         2. PROPS: Include objects, animals, or icons seen in that photo.
-         3. PALETTE: Use the exact same color scheme.
-         The child should look like they are part of THAT specific party world.`
-      : "ENVIRONMENT: Use a generic professional and festive party theme style based on the chosen tone.";
+    const themeContext = `
+      THEME INSTRUCTIONS: 
+      ${config.themePrompt ? `Specific Theme Details: ${config.themePrompt}` : ""}
+      ${config.themeImage ? "In addition, follow the visual style, colors, and props from the provided 'theme reference image'." : ""}
+      The child should look like an organic part of this world.
+    `;
 
     const fullPrompt = `
       TASK: Create a professional illustration of a child.
       
-      CHILD REFERENCE: High facial resemblance to the 'child photo provided'. ${config.features ? `Specific facial traits: ${config.features}.` : ""} ${config.age ? `Appears to be ${config.age} years old.` : ""}
+      CHILD REFERENCE: High facial resemblance to the 'child photo provided'. ${config.features ? `Specific facial traits to emphasize: ${config.features}.` : ""} ${config.age ? `Appears to be ${config.age} years old.` : ""}
       
       ${themeContext}
       
@@ -81,7 +81,7 @@ export class GeminiService {
       - NO TEXT OR NUMBERS (EXCEPT FOR THE 'AGE NUMBER' ITEM).
       - THE CHILD'S FACE MUST BE RECOGNIZABLE FROM THE PHOTO.
       - BACKGROUND: MUST BE PLAIN WHITE for character, topper, tags, stickers, and age_number. Scenic for panel and invitation.
-      - HIGH QUALITY, CLEAN, NO DISTORTIONS.
+      - JOYFUL, FESTIVE MOOD.
     `;
 
     try {
