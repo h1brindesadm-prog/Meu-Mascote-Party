@@ -1,0 +1,7 @@
+{
+  "name": "Meu Mascote Party",
+  "description": "Crie kits de festa personalizados e profissionais com alta consistência facial usando IA. Transforme fotos de crianças em ilustrações fofas para convites, adesivos e toppers.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
