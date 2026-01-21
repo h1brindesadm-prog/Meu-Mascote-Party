@@ -1,57 +1,6 @@
 
 import React from 'react';
 
-export const THEME_CONFIGS = {
-  'Astronauta Espacial': {
-    primary: '#1e3a8a',
-    secondary: '#3b82f6',
-    accent: '#fbbf24',
-    prompt: 'wearing a cute high-tech space suit, floating among tiny stars and planets, soft blue and silver colors'
-  },
-  'Safari Baby': {
-    primary: '#166534',
-    secondary: '#4ade80',
-    accent: '#facc15',
-    prompt: 'wearing a cute explorer outfit with a khaki hat, surrounded by tiny tropical leaves, soft green and earth tones'
-  },
-  'Fada Encantada': {
-    primary: '#701a75',
-    secondary: '#d946ef',
-    accent: '#fdf4ff',
-    prompt: 'wearing a magical dress with sparkly translucent wings, holding a tiny star wand, surrounded by magic dust and flowers, pastel pink and purple colors'
-  },
-  'Dino Baby': {
-    primary: '#14532d',
-    secondary: '#84cc16',
-    accent: '#f97316',
-    prompt: 'wearing a cute dinosaur hoodie with soft spikes, surrounded by primitive plants and tiny eggs, vibrant green and orange'
-  },
-  'Princesa Real': {
-    primary: '#9d174d',
-    secondary: '#ec4899',
-    accent: '#fde68a',
-    prompt: 'wearing a royal elegant dress with a small gold crown, surrounded by magic sparkles and roses, soft pink and gold tones'
-  },
-  'Super-Herói Moderno': {
-    primary: '#991b1b',
-    secondary: '#ef4444',
-    accent: '#2563eb',
-    prompt: 'wearing a stylized superhero costume with a dynamic cape, heroic but cute pose, comic style elements, bold red and blue'
-  },
-  'Circo Mágico': {
-    primary: '#b91c1c',
-    secondary: '#facc15',
-    accent: '#1e40af',
-    prompt: 'wearing a colorful circus ringmaster outfit, small hat, surrounded by festive flags and balloons, vibrant red and yellow'
-  },
-  'Confeitaria Doce': {
-    primary: '#be185d',
-    secondary: '#f472b6',
-    accent: '#7dd3fc',
-    prompt: 'wearing a cute chef hat and apron, surrounded by floating cupcakes and candies, soft pastel colors'
-  }
-};
-
 export const Icons = {
   MagicWand: () => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
