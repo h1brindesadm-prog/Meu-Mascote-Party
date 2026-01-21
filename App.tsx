@@ -45,13 +45,13 @@ const App: React.FC = () => {
   const generateFullKit = async () => {
     if (!childPhoto) return;
 
-    setGeneration({ isGenerating: true, step: 'Preparando as tintas...', progress: 0 });
+    setGeneration({ isGenerating: true, step: 'Iniciando produção paralela...', progress: 0 });
     setKit([]);
 
     const service = new GeminiService();
     const items: { type: ItemType; label: string }[] = [
       { type: 'character', label: 'Personagem Principal' },
-      { type: 'expressions', label: 'Expressões Faciais' },
+      { type: 'expressions', label: 'Expressões' },
       { type: 'topper', label: 'Topper de Bolo' },
       { type: 'tags', label: 'Tags de Lembrancinha' },
       { type: 'stickers', label: 'Adesivos' },
@@ -60,30 +60,39 @@ const App: React.FC = () => {
       { type: 'panel', label: 'Painel Decorativo' }
     ];
 
-    const results: GeneratedImage[] = [];
+    let completedCount = 0;
+    const updateProgress = () => {
+      completedCount++;
+      setGeneration(prev => ({
+        ...prev,
+        progress: Math.round((completedCount / items.length) * 100),
+        step: `Concluído ${completedCount} de ${items.length} itens...`
+      }));
+    };
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      setGeneration({ 
-        isGenerating: true, 
-        step: `Criando ${item.label}...`, 
-        progress: Math.round(((i + 1) / items.length) * 100) 
-      });
-
-      const url = await service.generateKitItem(childPhoto, item.type, {
-        age,
-        features,
-        style,
-        tone,
-        themeImage: themePhoto
-      });
-
-      if (url) {
-        results.push({ id: `${item.type}-${Date.now()}`, type: item.type, url, label: item.label });
-        setKit([...results]);
+    // Gerar em paralelo para economizar tempo
+    const generationPromises = items.map(async (item) => {
+      try {
+        const url = await service.generateKitItem(childPhoto, item.type, {
+          age,
+          features,
+          style,
+          tone,
+          themeImage: themePhoto
+        });
+        
+        if (url) {
+          const newImage: GeneratedImage = { id: `${item.type}-${Date.now()}`, type: item.type, url, label: item.label };
+          setKit(prev => [...prev, newImage]);
+        }
+      } catch (error) {
+        console.error(`Erro ao gerar ${item.label}:`, error);
+      } finally {
+        updateProgress();
       }
-    }
+    });
 
+    await Promise.all(generationPromises);
     setGeneration({ isGenerating: false, step: 'Kit Completo!', progress: 100 });
   };
 
@@ -105,7 +114,7 @@ const App: React.FC = () => {
       const content = await zip.generateAsync({ type: "blob" });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(content);
-      link.download = `MeuMascoteParty_${Date.now()}.zip`;
+      link.download = `MeuMascoteParty_Kit_${Date.now()}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -140,7 +149,7 @@ const App: React.FC = () => {
                 disabled={isZipping}
                 className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all border-2 border-orange-500 text-orange-600 hover:bg-orange-50"
               >
-                {isZipping ? 'Compactando...' : 'Baixar ZIP'}
+                {isZipping ? 'Compactando...' : 'Baixar Kit ZIP'}
               </button>
             )}
             <button 
@@ -150,7 +159,7 @@ const App: React.FC = () => {
                 !childPhoto || generation.isGenerating ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-orange-500 text-white hover:bg-orange-600'
               }`}
             >
-              {generation.isGenerating ? 'Criando...' : 'Gerar Kit Completo'}
+              {generation.isGenerating ? 'Criando Kit...' : 'Gerar Kit Completo'}
             </button>
           </div>
         </div>
@@ -202,36 +211,39 @@ const App: React.FC = () => {
           <section className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-orange-50">
             <h2 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
               <span className="w-2 h-6 bg-amber-500 rounded-full"></span>
-              O Tema
+              Personalize a atmosfera da sua festa
             </h2>
             
             <div className="space-y-6">
-              <div 
-                onClick={() => themeInputRef.current?.click()}
-                className={`relative aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${
-                  themePhoto ? 'border-orange-300' : 'border-gray-200 bg-gray-50 hover:bg-orange-50'
-                }`}
-              >
-                {themePhoto ? <img src={themePhoto} className="w-full h-full object-cover" /> : (
-                  <div className="text-center p-4">
-                    <p className="text-sm font-bold text-gray-400 uppercase tracking-wider">Upload Foto do Tema</p>
-                    <p className="text-[10px] text-gray-400 mt-1">Ex: Foto da decoração, painel ou personagem</p>
-                  </div>
-                )}
-                <input type="file" ref={themeInputRef} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, setThemePhoto)} />
+              <div>
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Referência de Tema (Opcional)</span>
+                <div 
+                  onClick={() => themeInputRef.current?.click()}
+                  className={`relative aspect-video rounded-3xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${
+                    themePhoto ? 'border-orange-300' : 'border-gray-200 bg-gray-50 hover:bg-orange-50'
+                  }`}
+                >
+                  {themePhoto ? <img src={themePhoto} className="w-full h-full object-cover" /> : (
+                    <div className="text-center p-4">
+                      <p className="text-sm font-bold text-orange-400 uppercase tracking-wider">Carregar Referência</p>
+                      <p className="text-[10px] text-gray-400 mt-1">Foto da decoração ou painel</p>
+                    </div>
+                  )}
+                  <input type="file" ref={themeInputRef} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, setThemePhoto)} />
+                </div>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 block">Estilo</span>
+                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 block">Estilo da Ilustração</span>
                   <div className="flex bg-gray-50 p-1 rounded-2xl border border-gray-100">
                     <button onClick={() => setStyle('cartoon')} className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${style === 'cartoon' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400'}`}>Cartoon 2D</button>
-                    <button onClick={() => setStyle('pixar')} className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${style === 'pixar' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400'}`}>Pixar 3D</button>
+                    <button onClick={() => setStyle('pixar')} className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${style === 'pixar' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400'}`}>Estilo 3D Pixar</button>
                   </div>
                 </div>
 
                 <div>
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 block">Vibe</span>
+                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 block">Tom do Visual</span>
                   <div className="grid grid-cols-2 gap-2">
                     {(['cute', 'adventurous', 'magical', 'fun'] as VisualTone[]).map(t => (
                       <button 
@@ -257,7 +269,12 @@ const App: React.FC = () => {
                 {generation.isGenerating && (
                   <div className="flex items-center gap-4 bg-white px-6 py-3 rounded-full border border-orange-100 shadow-sm">
                     <div className="w-6 h-6 border-4 border-orange-100 border-t-orange-500 rounded-full animate-spin"></div>
-                    <span className="text-sm font-bold text-orange-600">{generation.step}</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-orange-600">{generation.step}</span>
+                      <div className="w-32 h-1.5 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                        <div className="h-full bg-orange-500 transition-all duration-500" style={{ width: `${generation.progress}%` }}></div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -287,9 +304,9 @@ const App: React.FC = () => {
                 ))}
                 
                 {generation.isGenerating && kit.length < 8 && (
-                  <div className="aspect-square bg-white/50 border-2 border-dashed border-orange-100 rounded-[2.5rem] flex flex-col items-center justify-center p-8 text-center">
+                  <div className="aspect-square bg-white/50 border-2 border-dashed border-orange-100 rounded-[2.5rem] flex flex-col items-center justify-center p-8 text-center animate-pulse">
                     <div className="w-12 h-12 border-4 border-gray-100 border-t-orange-500 rounded-full animate-spin mb-4"></div>
-                    <p className="text-xs text-orange-400 font-bold uppercase tracking-widest">Renderizando...</p>
+                    <p className="text-xs text-orange-400 font-bold uppercase tracking-widest">Gerando ilustrações em paralelo...</p>
                   </div>
                 )}
               </div>
@@ -301,13 +318,16 @@ const App: React.FC = () => {
               </div>
               <h2 className="text-4xl font-bold text-gray-800 mb-4 font-title">Crie a Festa do Seu Pequeno!</h2>
               <p className="text-gray-500 max-w-lg mb-12 text-lg leading-relaxed">
-                Envie a foto da criança e uma referência do tema. Nossa IA criará um kit completo com <b>8 itens exclusivos</b> para a decoração.
+                Envie a foto da criança e uma referência do tema. Nossa IA criará um kit completo em segundos com <b>8 itens exclusivos</b>:
               </p>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl">
-                {['Personagem', 'Convite', 'Painel', 'Adesivos'].map(item => (
-                  <div key={item} className="p-4 bg-orange-50/30 rounded-2xl border border-orange-50">
-                    <span className="text-[10px] font-bold text-orange-400 uppercase tracking-widest">{item}</span>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
+                {[
+                  'Personagem Principal', 'Expressões', 'Topper de Bolo', 'Tags de Lembrancinha',
+                  'Adesivos', 'Convite Digital', 'Número da Idade', 'Painel Decorativo'
+                ].map(item => (
+                  <div key={item} className="p-4 bg-orange-50/30 rounded-2xl border border-orange-50 flex items-center justify-center text-center">
+                    <span className="text-[10px] font-bold text-orange-600 uppercase tracking-widest leading-tight">{item}</span>
                   </div>
                 ))}
               </div>
