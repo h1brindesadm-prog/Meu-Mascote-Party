@@ -20,84 +20,81 @@ export class GeminiService {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const styleDesc = config.style === 'pixar' 
-      ? "Professional 3D Disney/Pixar movie style, high quality render, octane render, soft subsurface scattering, cinematic lighting, 4k resolution" 
-      : "Professional 2D flat cartoon illustration, clean thick lines, vibrant modern vector art, children's book style, sharp details";
+      ? "Professional 3D Disney/Pixar animation style, high-end 3D render, octane render, soft subsurface scattering, cinematic lighting, 4k resolution, voluminous hair, expressive eyes" 
+      : "Professional 2D vector flat cartoon illustration, clean thick tapered lines, vibrant modern colors, children's book style, sharp details, minimalist shading";
 
     const toneDesc = {
-      cute: "Soft pastel colors, very sweet and gentle, heart/sparkle elements",
-      adventurous: "Dynamic lighting, bold colors, exploration elements, action pose",
-      magical: "Glow effects, ethereal lighting, star dust, whimsical atmosphere",
-      fun: "Bright saturated colors, funny expression, festive and high energy"
+      cute: "Soft pastel color palette, sweet and gentle mood, heart and sparkle atmospheric elements",
+      adventurous: "Dynamic cinematic lighting, bold saturated colors, exploration and action elements",
+      magical: "Glow effects, ethereal magical sparkles, whimsical star dust, dreamy atmosphere",
+      fun: "Bright pop colors, high energy, festive party mood, joyful expression"
     }[config.tone];
 
     let itemPrompt = "";
     switch (itemType) {
       case 'character':
-        itemPrompt = "Full body standing pose, iconic character design. The child should be wearing an outfit directly inspired by the theme.";
+        itemPrompt = "Full body standing mascot character. The child wears a professional outfit themed after the reference. High facial similarity to the child photo.";
         break;
       case 'expressions':
-        itemPrompt = "Sheet of 4 different facial expressions of the same child (laughing, surprised, winking, smiling), organized grid. The child must be wearing the themed clothing.";
+        itemPrompt = "A character sheet showcasing 4 different facial expressions (laughing, surprised, happy, winking) of the EXACT same child. Consistent clothing. Grid layout.";
         break;
       case 'topper':
-        itemPrompt = "Action pose jumping or holding a themed prop, perfect for a cake topper, die-cut style, white border.";
+        itemPrompt = "Dynamic action pose of the child mascot, perfect for a die-cut cake topper. Thick white outline around the character. White background.";
         break;
       case 'tags':
-        itemPrompt = "Close-up portrait inside a decorative themed frame.";
+        itemPrompt = "Bust portrait of the child inside a beautiful decorative circular themed border. Flat design elements around the head. White background.";
         break;
       case 'stickers':
-        itemPrompt = "Collection of 3 small themed icons/poses of the child, sticker style with white borders.";
+        itemPrompt = "Set of 3 small themed stickers of the child in different funny poses. Each sticker has a thick white border. White background.";
         break;
       case 'invitation':
-        itemPrompt = "Scenic illustration. Place the child inside a background that perfectly recreates the themed environment. No text.";
+        itemPrompt = "Complete scenic digital invitation background. The child is integrated into a detailed environment inspired by the theme. Cinematic composition. No text.";
         break;
       case 'age_number':
-        itemPrompt = `The child happily hugging or leaning against a large decorative 3D number "${config.age || '?'}", where the number itself is decorated with textures and patterns from the theme.`;
+        itemPrompt = `The child mascot happily leaning against a giant decorative 3D number "${config.age || '1'}". The number is textured and decorated according to the theme. White background.`;
         break;
       case 'panel':
-        itemPrompt = "Wide horizontal landscape illustration, cinematic background. An epic expansion of the themed world, with the child as the protagonist.";
+        itemPrompt = "Ultra-wide 16:9 cinematic decorative panel. High detail landscape of the theme's world with the child as the central hero. Epic lighting.";
         break;
     }
 
-    const themeContext = `
-      THEME INSTRUCTIONS: 
-      ${config.themePrompt ? `Specific Theme Details: ${config.themePrompt}` : ""}
-      ${config.themeImage ? "In addition, follow the visual style, colors, and props from the provided 'theme reference image'." : ""}
-      The child should look like an organic part of this world.
-    `;
-
     const fullPrompt = `
-      TASK: Create a professional illustration of a child.
+      TASK: Create a professional illustration of a child mascot for a party kit.
       
-      CHILD REFERENCE: High facial resemblance to the 'child photo provided'. ${config.features ? `Specific facial traits to emphasize: ${config.features}.` : ""} ${config.age ? `Appears to be ${config.age} years old.` : ""}
+      CORE REQUIREMENT: Maintain HIGH FACIAL CONSISTENCY with the 'child photo'. 
+      CHILD TRAITS: ${config.features || "Maintain all recognizable facial features"}. 
+      ESTIMATED AGE: ${config.age || "child age"}.
       
-      ${themeContext}
+      STYLE: ${styleDesc}.
+      TONE/VIBE: ${toneDesc}.
       
-      STYLE & TONE: ${styleDesc}. ${toneDesc}.
+      ITEM SPECIFICATION: ${itemPrompt}
       
-      ITEM TYPE SPECIFICS: ${itemPrompt}
-      
-      CRITICAL RULES:
-      - ONLY ONE CHILD (EXCEPT FOR THE EXPRESSIONS SHEET).
-      - NO TEXT OR NUMBERS (EXCEPT FOR THE 'AGE NUMBER' ITEM).
-      - THE CHILD'S FACE MUST BE RECOGNIZABLE FROM THE PHOTO.
-      - BACKGROUND: MUST BE PLAIN WHITE for character, topper, tags, stickers, and age_number. Scenic for panel and invitation.
-      - JOYFUL, FESTIVE MOOD.
+      IMPORTANT:
+      - The character MUST have the same face in every generation.
+      - The clothing and theme colors MUST match the 'theme reference image' if provided.
+      - NO TEXT (except for age_number).
+      - BACKGROUND: MUST BE PLAIN WHITE for 'character', 'expressions', 'topper', 'tags', 'stickers', and 'age_number'. Scenic/Environment for 'panel' and 'invitation'.
     `;
 
     try {
+      // Limpeza do base64 para garantir envio correto
+      const childData = childImageBase64.includes(',') ? childImageBase64.split(',')[1] : childImageBase64;
+      
       const parts: any[] = [
         { 
           inlineData: { 
-            data: childImageBase64.split(',')[1] || childImageBase64, 
+            data: childData, 
             mimeType: 'image/png' 
           } 
         }
       ];
 
       if (config.themeImage) {
+        const themeData = config.themeImage.includes(',') ? config.themeImage.split(',')[1] : config.themeImage;
         parts.push({ 
           inlineData: { 
-            data: config.themeImage.split(',')[1] || config.themeImage, 
+            data: themeData, 
             mimeType: 'image/png' 
           } 
         });
@@ -110,7 +107,7 @@ export class GeminiService {
         contents: { parts },
         config: { 
           imageConfig: { 
-            aspectRatio: itemType === 'panel' ? "16:9" : "1:1" 
+            aspectRatio: (itemType === 'panel' || itemType === 'invitation') ? "16:9" : "1:1" 
           } 
         },
       });
@@ -122,7 +119,7 @@ export class GeminiService {
       }
       return null;
     } catch (error) {
-      console.error(`Error generating ${itemType}:`, error);
+      console.error(`Gemini Error (${itemType}):`, error);
       return null;
     }
   }
