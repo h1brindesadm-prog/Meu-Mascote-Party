@@ -59,10 +59,21 @@ export class GeminiService {
     }
 
     const fullPrompt = `
-      TASK: Create a professional illustration of a child mascot for a party kit.
+      **CRITICAL MISSION: HIGH-FIDELITY FACIAL REPLICATION.** Your most important task is to meticulously analyze the provided 'child photo' and replicate every facial detail with extreme accuracy into the final illustration. This is not a generic character; it is a specific child.
       
-      CORE REQUIREMENT: Maintain HIGH FACIAL CONSISTENCY with the 'child photo'. 
-      CHILD TRAITS: ${config.features || "Maintain all recognizable facial features"}. 
+      **FACIAL ANALYSIS CHECKLIST (MANDATORY):**
+      - **Eye Shape & Color:** Perfectly match the shape (almond, round, etc.) and color.
+      - **Eyebrows:** Match the shape, thickness, and arch.
+      - **Nose:** Replicate the bridge, tip, and nostril shape.
+      - **Mouth:** Match the lip thickness, smile shape, and any visible teeth details.
+      - **Face Shape:** Match the jawline, chin, and cheek structure.
+      - **Hair:** Replicate the color, texture (curly, straight), and hairline.
+      - **Unique Features:** Include any visible freckles, moles, or dimples.
+      
+      TASK: Create a professional illustration of a child mascot for a party kit based on the above analysis.
+      
+      CORE REQUIREMENT: Maintain the HIGHEST POSSIBLE FACIAL CONSISTENCY with the 'child photo'. The resemblance must be undeniable.
+      CHILD TRAITS (ADDITIONAL): ${config.features || "No extra features provided by user."}. 
       ESTIMATED AGE: ${config.age || "child age"}.
       
       STYLE: ${styleDesc}.
@@ -70,8 +81,8 @@ export class GeminiService {
       
       ITEM SPECIFICATION: ${itemPrompt}
       
-      IMPORTANT:
-      - The character MUST have the same face in every generation.
+      IMPORTANT RULES:
+      - The character MUST have the same meticulously replicated face in every generation.
       - The clothing and theme colors MUST match the 'theme reference image' if provided.
       - NO TEXT (except for age_number).
       - BACKGROUND: MUST BE PLAIN WHITE for 'character', 'expressions', 'topper', 'tags', 'stickers', and 'age_number'. Scenic/Environment for 'panel' and 'invitation'.
@@ -85,7 +96,7 @@ export class GeminiService {
         { 
           inlineData: { 
             data: childData, 
-            mimeType: 'image/png' 
+            mimeType: 'image/jpeg' // Usar jpeg por ser mais comum
           } 
         }
       ];
@@ -95,7 +106,7 @@ export class GeminiService {
         parts.push({ 
           inlineData: { 
             data: themeData, 
-            mimeType: 'image/png' 
+            mimeType: 'image/jpeg'
           } 
         });
       }
